@@ -51,3 +51,53 @@ footer { background: #061a30; }
 @media(max-width:620px) {
 	.hero-overlay { background: linear-gradient(0deg, rgba(3, 20, 39, .94), rgba(7, 38, 66, .22) 80%); }
 }
+
+.sport-card:not(.compact) {
+	aspect-ratio: 2 / 1;
+	min-height: 0;
+	padding: 20px 22px;
+	background:
+		linear-gradient(118deg, transparent 0 57%, color-mix(in srgb, var(--sport-accent) 18%, transparent) 57% 73%, transparent 73%),
+		linear-gradient(145deg, color-mix(in srgb, var(--sport-accent) 14%, white), white 62%);
+}
+
+.sport-card:not(.compact)::before {
+	width: 4px;
+	z-index: 2;
+}
+
+.sport-card:not(.compact)::after {
+	content: "";
+	position: absolute;
+	width: 42%;
+	aspect-ratio: 1;
+	right: -12%;
+	bottom: -66%;
+	border: 1px solid color-mix(in srgb, var(--sport-accent) 34%, transparent);
+	transform: rotate(45deg);
+	pointer-events: none;
+}
+
+.sport-card:not(.compact) .sport-icon {
+	font-size: 27px;
+}
+
+.sport-card:not(.compact) h3 {
+	margin: 12px 0 5px;
+	font-size: 21px;
+}
+
+.sport-card:not(.compact) p {
+	max-width: 82%;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.sport-card:not(.compact) .card-arrow {
+	top: 18px;
+	right: 18px;
+}
+
+@media(max-width:620px) {
+	.sport-card:not(.compact) { min-height: 0; }
+}
