@@ -53,9 +53,13 @@ footer { background: #061a30; }
 }
 
 .sport-card:not(.compact) {
-	aspect-ratio: 2 / 1;
+	aspect-ratio: 3.25 / 1;
 	min-height: 0;
-	padding: 20px 22px;
+	padding: 16px 18px;
+	display: grid;
+	grid-template-columns: 32px minmax(0, 1fr) 20px;
+	align-items: center;
+	gap: 13px;
 	background:
 		linear-gradient(118deg, transparent 0 57%, color-mix(in srgb, var(--sport-accent) 18%, transparent) 57% 73%, transparent 73%),
 		linear-gradient(145deg, color-mix(in srgb, var(--sport-accent) 14%, white), white 62%);
@@ -79,23 +83,24 @@ footer { background: #061a30; }
 }
 
 .sport-card:not(.compact) .sport-icon {
-	font-size: 27px;
+	font-size: 24px;
 }
 
 .sport-card:not(.compact) h3 {
-	margin: 12px 0 5px;
-	font-size: 21px;
+	margin: 0 0 4px;
+	font-size: 19px;
 }
 
 .sport-card:not(.compact) p {
-	max-width: 82%;
-	font-size: 12px;
-	line-height: 1.4;
+	max-width: 90%;
+	font-size: 11px;
+	line-height: 1.35;
 }
 
 .sport-card:not(.compact) .card-arrow {
-	top: 18px;
-	right: 18px;
+	position: static;
+	width: 17px;
+	justify-self: end;
 }
 
 @media(max-width:620px) {
