@@ -6,6 +6,10 @@
   NODE_VERSION = "22"
   PNPM_VERSION = "9"
 
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["node_modules/@supabase/**"]
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
