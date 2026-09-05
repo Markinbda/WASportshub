@@ -1502,6 +1502,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_roster_member: {
+        Args: {
+          first_name: string
+          graduation_year?: number
+          is_captain?: boolean
+          jersey_number?: string
+          last_name: string
+          player_role?: string
+          target_team_id: string
+        }
+        Returns: string
+      }
       can_manage_media: { Args: { target_media_id: string }; Returns: boolean }
       can_manage_sport: { Args: { target_sport_id: string }; Returns: boolean }
       can_manage_student: {
