@@ -28,3 +28,26 @@ footer{background:#0c2015;color:#c1cdc5;padding-top:55px}.footer-grid{display:gr
 @media(max-width:620px) {
 	.brand-mark { width: 48px; height: 48px; }
 }
+
+/* Warwick Academy navy and light-blue brand surfaces. */
+.site-header { background: rgba(245, 249, 251, .97); }
+.main-nav a { color: #40566a; }
+.hero-overlay { background: linear-gradient(90deg, rgba(3, 20, 39, .92), rgba(8, 48, 78, .55) 48%, rgba(7, 31, 56, .08) 76%), linear-gradient(0deg, rgba(3, 20, 39, .72), transparent 45%); }
+.eyebrow.light { color: #8bcce3; }
+.button-primary:hover { background: #8bcce3; }
+.week-strip, .sport-card, .roster-card, .calendar-item, .auth-form-wrap, .admin-grid button, .decade-grid button { background: #fff; }
+.news-section, .filter-bar, .private-programmes { background: #e8f3f8; }
+.section-ink, .result-summary, .archive-banner { background: #071f38; }
+.stat-grid, .stat-grid div { border-color: #2d5776; }
+.result-summary div { border-color: #2d5776; }
+.performance-grid > div > p:not(.eyebrow), .stat-grid span, .archive-banner p:last-child { color: #bad2df; }
+.private-item { border-color: #c5dce7; }
+.news-grid, .news-item { border-color: #c7dce6; }
+.gallery-grid figcaption { background: linear-gradient(transparent, rgba(3, 20, 39, .88)); }
+.page-intro .page-width > p:last-child, .sport-hero p:last-child, .auth-copy > p:last-child { color: #c8deea; }
+footer { background: #061a30; }
+.footer-base { border-color: #244765; color: #8da9ba; }
+
+@media(max-width:620px) {
+	.hero-overlay { background: linear-gradient(0deg, rgba(3, 20, 39, .94), rgba(7, 38, 66, .22) 80%); }
+}

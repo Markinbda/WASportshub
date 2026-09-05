@@ -6,13 +6,13 @@
   background: #f7f7f2;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --green: #133e2b;
-  --green-bright: #1f704a;
-  --gold: #e8b33f;
-  --ink: #12241a;
-  --paper: #f7f7f2;
-  --muted: #66736b;
-  --line: #dce1dc;
+  --green: #0b2d4f;
+  --green-bright: #147fa8;
+  --gold: #67b9d6;
+  --ink: #071f38;
+  --paper: #f5f9fb;
+  --muted: #5f7180;
+  --line: #d6e2e8;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
