@@ -1,6 +1,6 @@
 # Sport tile images
 
-Place landscape JPG images in this folder. Tiles load them automatically by sport slug.
+Optimized landscape JPG images in this folder are loaded automatically by sport slug.
 
 Recommended source size: **1600 x 500 pixels** or another image close to a 3.25:1 ratio.
 
@@ -26,3 +26,5 @@ Other examples:
 - `equestrian.jpg`
 
 Use lowercase filenames exactly matching the URL slug. Keep each optimized image below 500 KB where practical. Only use images cleared for publication and student consent.
+
+Original high-resolution source files are kept locally in `assets-source/sport-tiles/` and are intentionally excluded from Git and Netlify builds.

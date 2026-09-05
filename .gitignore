@@ -28,3 +28,6 @@ dist-ssr
 
 # Local Supabase CLI state
 supabase/.temp
+
+# Original media sources (optimized copies live in public/)
+assets-source/
