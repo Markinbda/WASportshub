@@ -234,3 +234,59 @@ footer { background: #061a30; }
 	.reminder-signup form { grid-template-columns: 1fr; }
 	.reminder-signup form > p { grid-column: auto; }
 }
+
+/* Terms — home tiles + per-term page */
+.term-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.term-card { position: relative; background: #fff; border: 1px solid var(--line); color: var(--ink); text-decoration: none; padding: 30px 32px 34px; min-height: 200px; display: grid; align-content: start; gap: 6px; overflow: hidden; transition: transform .2s, border-color .2s; }
+.term-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 6px; background: var(--sport-accent); }
+.term-card::after { content: ""; position: absolute; right: -40px; bottom: -40px; width: 160px; height: 160px; border: 1px solid color-mix(in srgb, var(--sport-accent) 35%, transparent); transform: rotate(45deg); pointer-events: none; }
+.term-card:hover { transform: translateY(-3px); border-color: #aebbb2; }
+.term-card h3 { margin: 4px 0 2px; font: 700 30px Georgia, serif; color: var(--ink); }
+.term-card small { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1.6px; font-weight: 800; }
+.term-card .term-card-sports { margin: 14px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 280px; }
+.term-card .card-arrow { color: var(--sport-accent); }
+
+.page-intro h1 small { display: block; color: #c8deea; font: 400 clamp(18px,2vw,22px) Georgia, serif; margin-top: 8px; letter-spacing: 0; }
+.term-header-sports { display: flex; flex-wrap: wrap; gap: 18px; margin: 22px 0 0 !important; color: #c8deea; font-size: 13px; }
+.term-header-sports span { display: inline-flex; align-items: center; gap: 8px; }
+
+.term-sport-list { display: grid; gap: 44px; padding-block: 62px; }
+.term-sport { padding: 30px 32px; background: #fff; border: 1px solid var(--line); position: relative; overflow: hidden; }
+.term-sport::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--sport-accent); }
+.term-sport-heading { display: grid; grid-template-columns: 68px 1fr auto; align-items: center; gap: 22px; margin-bottom: 24px; }
+.term-sport-icon { width: 62px; aspect-ratio: 1; display: grid; place-items: center; font-size: 30px; background: color-mix(in srgb, var(--sport-accent) 14%, #fff); border: 1px solid color-mix(in srgb, var(--sport-accent) 35%, var(--line)); }
+.term-sport-heading h2 { margin: 4px 0 4px; font: 700 30px Georgia, serif; }
+.term-sport-heading p:last-child { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 620px; }
+.term-sport-teams { border-top: 1px solid var(--line); padding-top: 20px; }
+.term-sport-teams > .eyebrow { margin-bottom: 14px; }
+.term-team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.term-team-card { background: #f6faff; border: 1px solid var(--line); padding: 20px 22px; display: grid; gap: 14px; }
+.term-team-card header h3 { margin: 4px 0 3px; font: 700 20px Georgia, serif; }
+.term-team-card header small { color: var(--muted); font-size: 11px; }
+.term-roster { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.term-roster li { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; padding: 8px 6px; border-bottom: 1px dashed #d5e1e8; font-size: 13px; }
+.term-roster li:last-child { border-bottom: 0; }
+.term-roster .jersey { font: 700 18px Georgia, serif; color: var(--green-bright); text-align: center; }
+.term-roster .name { font-weight: 700; color: var(--ink); }
+.term-roster .role { color: var(--muted); font-size: 11px; text-align: right; }
+
+.term-gallery-embed { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #071f38; border: 1px solid var(--line); overflow: hidden; }
+.term-gallery-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.term-gallery-placeholder { min-height: 260px; border: 1px dashed #aebbb2; display: grid; place-items: center; align-content: center; gap: 10px; color: var(--muted); text-align: center; padding: 30px; background: #f4f7fa; }
+.term-gallery-placeholder p { margin: 0; font-size: 13px; }
+.term-gallery-placeholder code { background: #e8f3f8; padding: 1px 6px; font-size: 12px; }
+
+@media(max-width:900px) {
+	.term-grid { grid-template-columns: 1fr; }
+	.term-team-grid { grid-template-columns: 1fr; }
+	.term-sport-heading { grid-template-columns: 56px 1fr; }
+	.term-sport-heading .text-link { grid-column: 2; justify-self: start; }
+}
+
+@media(max-width:620px) {
+	.term-card { padding: 24px; }
+	.term-sport { padding: 22px 20px; }
+	.term-roster li { grid-template-columns: 32px 1fr; }
+	.term-roster .role { grid-column: 2; text-align: left; }
+}
+

@@ -3,9 +3,9 @@ import type { Session } from '@supabase/supabase-js'
 import { ArrowRight, CalendarDays, ChevronDown, Clock3, LockKeyhole, MapPin, Menu, Search, ShieldCheck, Trophy, Users, X } from 'lucide-react'
 import { BrowserRouter, Link, NavLink, Route, Routes, useParams } from 'react-router-dom'
 import { AdminWorkspace } from './admin/AdminWorkspace'
-import { sports } from './lib/data'
+import { sports, terms, type Term } from './lib/data'
 import { downloadFixtureCalendar } from './lib/calendar'
-import { loadFixtures, loadHistory, loadMedia, loadNews, loadPublicRoster, loadTeams, type LiveFixture, type LiveMediaItem } from './lib/athletics'
+import { loadFixtures, loadHistory, loadMedia, loadNews, loadPublicRoster, loadTeams, type LiveFixture, type LiveMediaItem, type LiveTeam } from './lib/athletics'
 import { supabase } from './lib/supabase'
 import { useAsyncResource } from './lib/useAsyncResource'
 import './App.css'
@@ -30,7 +30,7 @@ function Shell() {
     <main><Routes>
       <Route path="/" element={<HomePage />} /><Route path="/sports" element={<SportsPage />} /><Route path="/sports/:slug" element={<SportPage />} />
       <Route path="/teams" element={<TeamsPage />} /><Route path="/results" element={<ResultsPage />} /><Route path="/calendar" element={<CalendarPage />} />
-      <Route path="/gallery" element={<GalleryPage />} /><Route path="/history" element={<HistoryPage />} /><Route path="/news/:slug" element={<NewsArticlePage />} /><Route path="/admin" element={<AdminPage />} /><Route path="*" element={<NotFound />} />
+      <Route path="/gallery" element={<GalleryPage />} /><Route path="/history" element={<HistoryPage />} /><Route path="/news/:slug" element={<NewsArticlePage />} /><Route path="/terms/:slug" element={<TermPage />} /><Route path="/admin" element={<AdminPage />} /><Route path="*" element={<NotFound />} />
     </Routes></main><Footer />
   </div>
 }
@@ -49,7 +49,7 @@ function HomePage() {
       <div className="hero-caption page-width"><span>Season spotlight</span> High-Performance Football begins its autumn programme</div>
     </section>
     <section className="week-strip"><div className="page-width week-inner"><div className="section-label"><CalendarDays size={20} /><span><strong>Coming up</strong><small>Upcoming fixtures</small></span></div><div className="fixture-scroll">{upcoming.length ? upcoming.map((fixture) => <LiveFixtureMini key={fixture.id} fixture={fixture} />) : <span className="schedule-empty">The next fixtures will appear here when published.</span>}</div><Link className="text-link" to="/calendar">Full calendar <ArrowRight size={16} /></Link></div></section>
-    <section className="section page-width"><SectionHeading eyebrow="Find your team" title="Built for every Bear" description="From first fixtures to high-performance programmes, Warwick athletes have room to grow." link="/sports" linkText="All sports" /><div className="sport-grid featured-sports">{sports.filter((sport) => sport.category === 'primary').slice(0, 6).map((sport) => <SportCard key={sport.slug} sport={sport} />)}</div></section>
+    <section className="section page-width"><SectionHeading eyebrow="Find your team" title="Built for every term" description="Warwick Bears sport is played across three terms. Explore the teams competing each season." link="/sports" linkText="All sports" /><div className="term-grid">{terms.map((term) => <TermCard key={term.slug} term={term} />)}</div></section>
     <section className="section section-ink"><div className="page-width performance-grid"><div><p className="eyebrow gold">Performance snapshot</p><h2>A season taking shape.</h2><p>Published results from across Warwick Academy sport.</p><Link className="button button-outline" to="/results">Explore results <ArrowRight size={17} /></Link></div><div className="stat-grid"><div><strong>{completed.length}</strong><span>Results recorded</span></div><div><strong>{wins}</strong><span>Warwick wins</span></div><div><strong>{completed.length ? Math.round((wins / completed.length) * 100) : 0}%</strong><span>Win rate</span></div><div><strong>{new Set(liveFixtures.map((item) => item.teamId)).size}</strong><span>Teams on schedule</span></div></div></div></section>
     <section className="section page-width"><SectionHeading eyebrow="From the sidelines" title="Latest galleries" description="Training, competition and the moments that bring our community together." link="/gallery" linkText="View gallery" />{liveMedia.length ? <LiveGalleryGrid items={liveMedia.slice(0, 4)} /> : <EmptyState text="Approved athletics media will appear here." />}</section>
     <section className="section news-section"><div className="page-width"><SectionHeading eyebrow="Bear news" title="Around the programme" description="Stories and updates from Warwick Academy athletics." />{liveNews.length ? <div className="news-grid">{liveNews.slice(0, 3).map((item) => <article className="news-item" key={item.id}><p className="meta">{item.sportName ?? 'Athletics'} · {item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('en-BM', { month: 'long', day: 'numeric' }) : 'News'}</p><h3>{item.title}</h3><p>{item.summary}</p><Link className="read-more" to={`/news/${item.slug}`}>Read story <ArrowRight size={15} /></Link></article>)}</div> : <EmptyState text="Published athletics stories will appear here." />}</div></section>
@@ -167,6 +167,78 @@ function AdminPage() {
 }
 
 function SportCard({ sport, compact = false }: { sport: (typeof sports)[number]; compact?: boolean }) { return <Link className={compact ? 'sport-card compact' : 'sport-card'} to={`/sports/${sport.slug}`} aria-label={`View ${sport.name}`} style={{ '--sport-accent': sport.accent } as React.CSSProperties}>{!compact && <img className="sport-photo" src={`/sport-tiles/${sport.slug}.jpg`} alt="" loading="lazy" onError={(event) => { event.currentTarget.hidden = true }} />}<span className="sport-icon">{sport.icon}</span><div><h3>{sport.name}</h3>{!compact && <p>{sport.description}</p>}</div><ArrowRight className="card-arrow" /></Link> }
+
+function TermCard({ term }: { term: Term }) {
+  const names = term.sportSlugs.map((slug) => sports.find((sport) => sport.slug === slug)?.name).filter(Boolean).join(' · ')
+  return <Link className="term-card" to={`/terms/${term.slug}`} style={{ '--sport-accent': term.accent } as React.CSSProperties}>
+    <p className="eyebrow">Term {term.number}</p>
+    <h3>{term.title}</h3>
+    <small>{term.subtitle}</small>
+    <p className="term-card-sports">{names}</p>
+    <ArrowRight className="card-arrow" />
+  </Link>
+}
+
+function TermPage() {
+  const { slug } = useParams()
+  const term = terms.find((item) => item.slug === slug)
+  const { data: liveTeams, loading: teamsLoading } = useAsyncResource(loadTeams, [])
+  if (!term) return <NotFound />
+  const termSports = term.sportSlugs.map((s) => sports.find((sp) => sp.slug === s)).filter((sp): sp is (typeof sports)[number] => Boolean(sp))
+  return <>
+    <section className="page-intro" style={{ '--sport-accent': term.accent } as React.CSSProperties}>
+      <div className="page-width">
+        <p className="eyebrow gold">Warwick Bears · Term {term.number}</p>
+        <h1>{term.title}<small> — {term.subtitle}</small></h1>
+        <p>{term.intro}</p>
+        <p className="term-header-sports">{termSports.map((sport) => <span key={sport.slug}>{sport.icon} {sport.name}</span>)}</p>
+      </div>
+    </section>
+    <section className="section page-width term-sport-list">
+      {termSports.map((sport) => <TermSportBlock key={sport.slug} sport={sport} teams={liveTeams.filter((t) => t.sportSlug === sport.slug)} teamsLoading={teamsLoading} />)}
+    </section>
+    <section className="section page-width">
+      <SectionHeading eyebrow="From the sidelines" title={`${term.title} gallery`} description={`Photos and highlights from Warwick Bears ${term.subtitle.toLowerCase()}.`} />
+      <TermGalleryEmbed term={term} />
+    </section>
+  </>
+}
+
+function TermSportBlock({ sport, teams, teamsLoading }: { sport: (typeof sports)[number]; teams: LiveTeam[]; teamsLoading: boolean }) {
+  return <article className="term-sport" style={{ '--sport-accent': sport.accent } as React.CSSProperties}>
+    <header className="term-sport-heading">
+      <span className="term-sport-icon">{sport.icon}</span>
+      <div>
+        <p className="eyebrow">{sport.category === 'primary' ? 'Primary sport' : 'Programme sport'}</p>
+        <h2>{sport.name}</h2>
+        <p>{sport.description}</p>
+      </div>
+      <Link className="text-link" to={`/sports/${sport.slug}`}>Sport page <ArrowRight size={16} /></Link>
+    </header>
+    <div className="term-sport-teams">
+      <p className="eyebrow">Teams</p>
+      {teamsLoading ? <LoadingState text={`Loading ${sport.name} teams…`} /> : teams.length ? <div className="term-team-grid">{teams.map((team) => <TermTeamCard key={team.id} team={team} />)}</div> : <EmptyState text={`Teams for ${sport.name} will appear here once published.`} />}
+    </div>
+  </article>
+}
+
+function TermTeamCard({ team }: { team: LiveTeam }) {
+  const { data: members, loading } = useAsyncResource(() => loadPublicRoster(team.id), [], team.id)
+  return <div className="term-team-card">
+    <header>
+      <p className="eyebrow">{team.schoolYear}</p>
+      <h3>{team.name}</h3>
+      <small>{team.venueName ?? 'Venue TBC'}</small>
+    </header>
+    {loading ? <LoadingState text="Loading roster…" /> : members.length ? <ul className="term-roster">{members.map((player) => <li key={player.membershipId}><span className="jersey">{player.jerseyNumber ?? '—'}</span><span className="name">{player.displayName}</span><span className="role">{player.isCaptain ? `Captain${player.playerRole ? ` · ${player.playerRole}` : ''}` : player.playerRole ?? 'Squad member'}</span></li>)}</ul> : <p className="privacy-note"><ShieldCheck size={15} /> Roster not yet published.</p>}
+  </div>
+}
+
+// Update term.galleryEmbed in src/lib/data.ts with your iframe src for each term.
+function TermGalleryEmbed({ term }: { term: Term }) {
+  if (!term.galleryEmbed) return <div className="term-gallery-placeholder"><p><strong>Gallery coming soon.</strong></p><p>Add a photo/video embed URL to <code>term.galleryEmbed</code> in <code>src/lib/data.ts</code> to showcase this term.</p></div>
+  return <div className="term-gallery-embed"><iframe title={`${term.title} gallery`} src={term.galleryEmbed} loading="lazy" allowFullScreen /></div>
+}
 function LiveFixtureMini({ fixture }: { fixture: LiveFixture }) { const date = new Date(fixture.startsAt); return <div className="fixture-mini"><div className="mini-date"><strong>{date.toLocaleDateString('en-BM', { day: '2-digit' })}</strong><span>{date.toLocaleDateString('en-BM', { month: 'short' }).toUpperCase()}</span></div><div><strong>{fixture.teamName}</strong><span>vs {fixture.opponentName}</span><small>{date.toLocaleTimeString('en-BM', { hour: 'numeric', minute: '2-digit' })} · {fixture.venueName}</small></div></div> }
 function LiveGalleryGrid({ items }: { items: LiveMediaItem[] }) { return <div className="gallery-grid">{items.map((item, index) => <figure className={index === 0 ? 'gallery-feature' : ''} key={item.id}>{item.kind === 'photo' ? <img src={item.url} alt={item.altText} loading="lazy" /> : <iframe src={item.url} title={item.altText || item.caption} loading="lazy" allowFullScreen />}<figcaption><span>{item.capturedOn ? new Date(item.capturedOn).toLocaleDateString('en-BM') : 'Warwick Bears'}</span><strong>{item.caption}</strong></figcaption></figure>)}</div> }
 function SectionHeading({ eyebrow, title, description, link, linkText }: { eyebrow: string; title: string; description: string; link?: string; linkText?: string }) { return <div className="section-heading"><div><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p>{description}</p></div>{link && <Link className="text-link" to={link}>{linkText} <ArrowRight size={16} /></Link>}</div> }

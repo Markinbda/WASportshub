@@ -26,6 +26,53 @@ export const sports: Sport[] = [
   ...['Equestrian', 'Dance', 'Fitness'].map((name) => ({ name, slug: name.toLowerCase(), category: 'private' as const, description: 'Private-session programme information and enquiries.', icon: '○', accent: '#956d3f' })),
 ]
 
+export type Term = {
+  slug: string
+  number: 1 | 2 | 3
+  title: string
+  subtitle: string
+  intro: string
+  accent: string
+  sportSlugs: string[]
+  galleryEmbed: string
+}
+
+// galleryEmbed: paste the iframe SRC (e.g. Flickr album, Google Photos album,
+// YouTube playlist, or any embeddable URL) for each term. Leave '' to render a
+// placeholder box instead of an iframe.
+export const terms: Term[] = [
+  {
+    slug: 'term-1',
+    number: 1,
+    title: 'Term 1',
+    subtitle: 'Autumn season',
+    intro: 'The opening block of the Warwick Bears calendar. Football, netball, volleyball and swimming lead the autumn programme with fixtures across every age group.',
+    accent: '#1f8f58',
+    sportSlugs: ['football', 'netball', 'volleyball', 'swimming'],
+    galleryEmbed: '',
+  },
+  {
+    slug: 'term-2',
+    number: 2,
+    title: 'Term 2',
+    subtitle: 'Winter season',
+    intro: 'Warwick sport moves indoors and onto the pitch through winter. Basketball, rugby, cross-country and track & field carry the programme through the second term.',
+    accent: '#e36d32',
+    sportSlugs: ['basketball', 'rugby', 'cross-country', 'track-and-field'],
+    galleryEmbed: '',
+  },
+  {
+    slug: 'term-3',
+    number: 3,
+    title: 'Term 3',
+    subtitle: 'Summer season',
+    intro: 'The final term of the year celebrates skill, precision and speed. Badminton, softball, cricket and track & field bring the Warwick Bears season to a close.',
+    accent: '#3977b8',
+    sportSlugs: ['badminton', 'softball', 'cricket', 'track-and-field'],
+    galleryEmbed: '',
+  },
+]
+
 export const fixtures = [
   { day: '08', month: 'SEP', time: '4:00 PM', team: 'U15 Football', opponent: 'Saltus Grammar School', venue: 'Lower Field', sport: 'Football' },
   { day: '09', month: 'SEP', time: '3:45 PM', team: 'Varsity Netball', opponent: 'BHS', venue: 'Outdoor Netball Court', sport: 'Netball' },
